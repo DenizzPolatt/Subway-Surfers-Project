@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
         {
             _rigidbody.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 3f);
         }
-        
     }
+
+
 }

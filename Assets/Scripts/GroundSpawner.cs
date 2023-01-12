@@ -6,10 +6,11 @@ using UnityEngine;
 public class GroundSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject _ground;
-    private Vector3 _nextPointToSpawn;
+    public Vector3 _nextPointToSpawn;
     private float timer = 0.50f;
 
-
+    private List<GameObject> groundsSpawned;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -31,9 +32,19 @@ public class GroundSpawner : MonoBehaviour
             timer += 1;
             GameObject temp = Instantiate(_ground, _nextPointToSpawn, Quaternion.identity);
             _nextPointToSpawn = temp.transform.GetChild(4).transform.position;
-
+            //groundsSpawned.Add(temp);
         }
-        
+    }
+
+    private void DestroyIf()
+    {
+        if (groundsSpawned.Count > 30)
+        {
+            for (int i = 0; i < groundsSpawned.Count; i++)
+            {
+                Destroy(groundsSpawned[i], 3);
+            }
+        }
     }
 
 }
