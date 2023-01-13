@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private float boosterTimer;
     [SerializeField] private Coin coinPrefab;
     [SerializeField] private MagnetSphere sphere;
+    private float _speedUpTimer = 10;
     
 
     // Start is called before the first frame update
@@ -37,10 +38,12 @@ public class PlayerController : MonoBehaviour
         scoreText.text = _score.ToString();
         if (!gameover)
         {
+            _speedUpTimer -= Time.deltaTime;
             _rigidbody.velocity = Vector3.right * _runSpeed;
-            if (_rigidbody.transform.position.x % 100 == 0)
+            if (_speedUpTimer < 0)
             {
                 _runSpeed *= 1.2f;
+                _speedUpTimer += 10;
             }
             
         }
@@ -113,7 +116,7 @@ public class PlayerController : MonoBehaviour
     private void SpeedDown()
     {
         boosted = false;
-        _runSpeed = 10;
+        _runSpeed /= 1.5f;
     }
 
     private void BoosterUpdate()

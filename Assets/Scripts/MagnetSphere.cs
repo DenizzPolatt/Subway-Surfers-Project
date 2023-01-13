@@ -22,14 +22,12 @@ public class MagnetSphere : MonoBehaviour
 
     private void OnTriggerStay(Collider collider)
     {
-        Debug.Log("trigger");
         if (!_magnetActive) return;
         
         var coin = collider.GetComponent<Coin>();
 
         if (coin != null)
         {
-            Debug.Log("coin");
             coin.MoveTowardsPlayer();
         }
     }
