@@ -41,7 +41,8 @@ public class CoinSpawner : MonoBehaviour
 
     private Vector3 RandomPositionGenerator()
     {
-        int lane = Random.Range(-1, 2);
+        int lane = Random.Range(0, 3);
+        Debug.Log(lane);
         
         if (lane == 0) _coinSpawnPoint.z = -3;
         else if (lane == 1) _coinSpawnPoint.z = 0;

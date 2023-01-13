@@ -36,7 +36,7 @@ public class ObstacleSpawner : MonoBehaviour
 
     private Vector3 RandomPositionGenerator()
     {
-        int lane = Random.Range(-1, 2);
+        int lane = Random.Range(0, 3);
         
         if (lane == 0) _wagonSpawnPoint.z = -3;
         else if (lane == 1) _wagonSpawnPoint.z = 0;

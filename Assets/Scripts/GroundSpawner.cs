@@ -32,7 +32,6 @@ public class GroundSpawner : MonoBehaviour
             timer += 1;
             GameObject temp = Instantiate(_ground, _nextPointToSpawn, Quaternion.identity);
             _nextPointToSpawn = temp.transform.GetChild(4).transform.position;
-            //groundsSpawned.Add(temp);
         }
     }
 

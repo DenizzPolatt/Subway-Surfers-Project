@@ -6,11 +6,10 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    public bool magnet;
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -25,12 +24,17 @@ public class Coin : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
     }
 
     public void MoveTowardsPlayer()
     {
-        var player = GameObject.Find("Player");
-        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, 10);
-        magnet = false;
+        Debug.Log("1");
+        var player = GameObject.FindObjectOfType<PlayerController>();
+
+        if (Vector3.Distance(transform.position, player._rigidbody.position) < 10)
+        {
+            transform.position = Vector3.Lerp(transform.position, player._rigidbody.position, 10 * Time.deltaTime);
+        }
     }
 }

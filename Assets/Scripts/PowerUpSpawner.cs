@@ -31,11 +31,10 @@ public class PowerUpSpawner : MonoBehaviour
         _timer -= Time.deltaTime;
 
         int spawnTime = Random.Range(2, 5);
-        int index = Random.Range(0, 2);
+        int index = Random.Range(0, 3);
 
         if (_timer < 0)
         {
-            Debug.Log("spawned");
             _timer += spawnTime;
             Instantiate(powerupPrefabs[index], RandomPositionGenerator(), powerupPrefabs[index].transform.rotation);
         }
@@ -43,7 +42,7 @@ public class PowerUpSpawner : MonoBehaviour
 
     private Vector3 RandomPositionGenerator()
     {
-        int lane = Random.Range(-1, 2);
+        int lane = Random.Range(0, 3);
         
         if (lane == 0) _powerUpSpawnPoint.z = -3;
         else if (lane == 1) _powerUpSpawnPoint.z = 0;

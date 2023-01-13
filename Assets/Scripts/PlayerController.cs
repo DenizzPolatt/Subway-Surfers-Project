@@ -5,18 +5,25 @@ using TreeEditor;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody _rigidbody;
+    public Rigidbody _rigidbody;
     public float _runSpeed = 10;
     private bool gameover;
     private int _score = 0;
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI gameOverText;
+    [SerializeField] private Button restartButton;
     private bool boosted;
     private bool x2coin;
-    private float boosterTimer = 5.0f;
+    private bool magnet;
+    private float boosterTimer;
     [SerializeField] private Coin coinPrefab;
+    [SerializeField] private MagnetSphere sphere;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -28,7 +35,15 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         scoreText.text = _score.ToString();
-        if(!gameover) _rigidbody.velocity = Vector3.right * _runSpeed;
+        if (!gameover)
+        {
+            _rigidbody.velocity = Vector3.right * _runSpeed;
+            if (_rigidbody.transform.position.x % 100 == 0)
+            {
+                _runSpeed *= 1.2f;
+            }
+            
+        }
         Move();
         BoosterUpdate();
     }
@@ -44,6 +59,7 @@ public class PlayerController : MonoBehaviour
         {
             _rigidbody.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 3f);
         }
+        
     }
 
 
@@ -51,9 +67,7 @@ public class PlayerController : MonoBehaviour
     {
         if (col.gameObject.name == "Train(Clone)")
         {
-            Debug.Log("Game Over");
-            gameover = true;
-            _rigidbody.velocity = Vector3.zero;
+            GameOver();
         }
 
         if (col.gameObject.name == "Speed(Clone)")
@@ -62,28 +76,38 @@ public class PlayerController : MonoBehaviour
             Destroy(col.gameObject);
         }
 
-        if (col.gameObject.name == "Magnet(Clone")
+        if (col.gameObject.name == "Magnet(Clone)")
         {
-            coinPrefab.magnet = true;
-            coinPrefab.MoveTowardsPlayer();
+            MagnetActive();
+            Destroy(col.gameObject);
         }
 
         if (col.gameObject.name == "Coin(Clone)")
         {
-            _score += 1;
-            if(x2coin) x2Coin();
+            if(x2coin) _score += 2;
+            else _score += 1;
         }
 
         if (col.gameObject.name == "x2Coin(Clone)")
         {
-            x2coin = true;
+            X2CoinActive();
+            Destroy(col.gameObject);
         }
+    }
+
+    private void GameOver()
+    {
+        gameover = true;
+        gameOverText.gameObject.SetActive(true);
+        restartButton.gameObject.SetActive(true);
+        _rigidbody.velocity = Vector3.zero;
     }
 
     private void SpeedUp()
     {
+        boosterTimer += 5;
         boosted = true;
-        _runSpeed = 15;
+        _runSpeed *= 1.5f;
     }
 
     private void SpeedDown()
@@ -100,16 +124,43 @@ public class PlayerController : MonoBehaviour
             if (boosterTimer < 0)
             {
                 SpeedDown();
-                x2coin = false;
-                coinPrefab.magnet = false;
+                X2CoinNotActive();
+                MagnetNotActive();
             }
         }
     }
-
-    private void x2Coin()
+    
+    private void X2CoinActive()
     {
+        boosterTimer += 5;
         boosted = true;
-        _score += 2;
+        x2coin = true;
+    }
+    
+    private void X2CoinNotActive()
+    {
+        boosted = false;
+        x2coin = false;
     }
 
+    private void MagnetActive()
+    {
+        boosterTimer += 5;
+        boosted = true;
+        magnet = true;
+        sphere._magnetActive = true;
+    }
+
+    private void MagnetNotActive()
+    {
+        boosted = false;
+        magnet = false;
+        sphere._magnetActive = false;
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(0);
+    }
+    
 }
